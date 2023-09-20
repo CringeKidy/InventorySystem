@@ -1,10 +1,19 @@
 const mongo = require('mongoose')
 require('dotenv').config();
 
-const ConnectURI = process.env.URI
+var ConnectURI = process.env.URI
+ConnectURI = ConnectURI.replace(/\?/, process.env.TYPE + "?")
+
+console.log(ConnectURI)
 
 module.exports = {
     ConnectDB: function () {
-        mongo.connect(ConnectURI + '/dev').then(console.log("connected to DB!")).catch((err) => { console.log('Error Connecting to DB', err) })
+        mongo.connect(ConnectURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(console.log("connected to DB!")).catch((err) => { console.log('Error Connecting to DB', err) })
+    },
+    DBStatus: function () {
+        return mongo.connection.readyState
     }
 }

@@ -16,8 +16,12 @@
 </template>
 
 <style>
-  buttons{
-    display:inline-flex;
+  nav{
+    display: inline-flex;
     justify-content: space-evenly;
+    width:100%;
+  }
+  h1, h2 {
+    text-align: center;
   }
 </style>
