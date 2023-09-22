@@ -2,7 +2,7 @@
     <div class="form-container">
     <h1 class="form-title">Add a new Item</h1>
     <form @submit.prevent>
-        <P style="color: red;">All Items marked with * are required</P>
+        <p style="color: red;">All Items marked with * are required</p>
         <label class="form-label">Add a New Item</label>
         <ul class="form-list">
             <li class="form-field">
@@ -58,6 +58,7 @@
 
   .form-field {
     margin-bottom: 15px;
+    padding-right: 10px;
   }
 
   .text-input {
@@ -105,7 +106,7 @@ export default{
             var ItemSKU = this.ItemSKU
 
             if(!ItemName || !ItemAmmount){
-                alert("Please Fill in All Required Feilds.")
+                alert("please Fill in All Required Feilds.")
             }
 
             axios.post(

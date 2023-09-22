@@ -8,7 +8,7 @@ var port = process.env.PORT
 
 
 require('dotenv').config();
-ConnectDB();
+//ConnectDB();
 
 app.use(cors())
 app.options("*", cors())
