@@ -13,10 +13,14 @@
                             <p class="field-label">Item Name</p> 
                         </div>
 
-                        <input type="text" class="text-input" v-model="TextInput" placeholder="Please start typing item name.">
+                        <input type="text" class="text-input" v-model="TextInput" v-on:input="FindItem()" placeholder="Please start typing item name.">
                         
                         <div class="form-search">
-                            <label  @click="test()">No Results Found.</label>
+                            <ul class="form-serach" v-if="filteredItems.length > 0">
+                                <li @click="ItemClicked(item)" class="form-Searchfeild" v-for="item in this.filteredItems" :key="item">{{ item }}</li>
+                            </ul>
+
+                            <label v-else>No results Found</label>
                         </div>
 
                     </li>
@@ -35,17 +39,53 @@
 </style>
 
 <script> 
+import axios from "axios"
+
 export default{
     name: "deleteitem",
+    async mounted() {
+        var DatabaseRequest = await axios.get('http://localhost:3030/api/getallitems')        
+        var DatabaseData = DatabaseRequest.data;
+
+        console.log(DatabaseRequest)
+
+
+        this.ItemList.push(DatabaseData);
+        console.log(this.ItemList)
+
+        
+    
+    },
     methods: {
-        test: function(){
-            console.log(this.List, this.TextInput)
+        FindItem: function(){
+            var filter = this.List.filter(item => item.includes(this.TextInput))
+
+            if(filter.length > 0){
+                filter.forEach(item =>{
+                    this.filteredItems.push(item)
+                })
+            }
+            else{
+                this.LabelText = "No Results found. "
+            }
+        },
+        ItemClicked: function(item){
+            console.log('item clicked:', item)
+
+            // axios({
+            //     uri: "http://localhost:3030/api/searchitem",
+            //     data:{
+            //         ItemName: Item
+            //     }
+            // })
+
         }
     },
     data() {
         return {
-            List: ["Apple", "Orange", "Banna", "Osometing", "Bsomething"],
-            TextInput:""
+            TextInput:"",
+            filteredItems: [],
+            ItemList:[]
             
         }
     }

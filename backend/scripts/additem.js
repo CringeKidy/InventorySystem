@@ -1,12 +1,6 @@
 const mongo = require('mongoose');
+const { ItemTable } = require('./schema.js');
 
-const ItemSchema = new mongo.Schema({
-    ItemName: String,
-    ItemAmmount: String,
-    ItemSKU: String
-})
-
-ItemTable = mongo.model('items', ItemSchema);
 
 module.exports = {
     Additem: function (inputData) {

@@ -1,14 +1,25 @@
 const express = require('express');
 const { ConnectDB, DBStatus } = require('./scripts/db');
+const { TempDBConnect } = require('./scripts/tempdb');
+
 const { Additem } = require('./scripts/additem.js')
+const { SearchItem, SearchAllitems } = require('./scripts/serachitem.js')
+
 const app = express()
 const cors = require('cors')
-const bodyparser = require("body-parser")
+const bodyparser = require("body-parser");
 var port = process.env.PORT
 
-
 require('dotenv').config();
-//ConnectDB();
+
+if (process.env.ENV = "laptop") {
+    TempDBConnect();
+}
+else {
+    ConnectDB();
+}
+
+
 
 app.use(cors())
 app.options("*", cors())
@@ -22,11 +33,19 @@ app.post('/api/additem', (req, res) => {
     console.log("Got IT!")
 
     Additem(req.body)
-
-
-
     res.send(200)
 })
+
+app.post('/api/serachitem', (req, res) => {
+
+})
+
+app.get('/api/getallitems', (req, res) => {
+    SearchAllitems().then(data => {
+        res.send(data)
+    })
+})
+
 
 
 app.get('/', (req, res) => {

@@ -4,8 +4,6 @@ require('dotenv').config();
 var ConnectURI = process.env.URI
 ConnectURI = ConnectURI.replace(/\?/, process.env.TYPE + "?")
 
-console.log(ConnectURI)
-
 module.exports = {
     ConnectDB: function () {
         mongo.connect(ConnectURI, {

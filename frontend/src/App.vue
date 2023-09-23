@@ -20,6 +20,7 @@
     display: inline-flex;
     justify-content: space-evenly;
     width:100%;
+    padding-bottom: 20px;
   }
   h1, h2 {
     text-align: center;
