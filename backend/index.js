@@ -12,10 +12,12 @@ var port = process.env.PORT
 
 require('dotenv').config();
 
-if (process.env.ENV = "laptop") {
+console.log(process.env.DEP)
+
+if (process.env.DEP === "laptop") {
     TempDBConnect();
 }
-else {
+else{
     ConnectDB();
 }
 
