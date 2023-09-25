@@ -9,5 +9,21 @@ module.exports = {
             if (err) throw err;
             return data
         })
+    },
+    DeleteItem: async function(ItemName, ItemSku){
+        
+        ItemName.find({ItemName, ItemSku}).then((res) => {
+            console.log(res)
+        })
+        
+        try{
+            const result = await ItemTable.deleteOne({ItemName, ItemSku})
+            console.log(result)
+
+
+        }catch(err){
+            console.log(err)
+        }
+        
     }
 }

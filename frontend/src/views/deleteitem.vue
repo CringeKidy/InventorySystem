@@ -13,34 +13,23 @@
               <p class="field-label">Item Name</p>
             </div>
 
-            <input
-              type="text"
-              :readonly="this.ItemNameDisabled"
-              :style="{
+            <div class="form-input">
+              <input type="text" :readonly="this.ItemNameDisabled" :style="{
                 backgroundColor: itemIsClicked,
                 color: itemIsClickedtext,
-              }"
-              class="text-input"
-              v-model="ItemNameText"
-              v-on:input="FindItem()"
-              placeholder="Please start typing item name."
-            />
+              }" class="text-input" v-model="ItemNameText" v-on:input="FindItem()"
+                placeholder="Please start typing item name." />
+              <input type='button' value="❌" @click="ClearFeilds()" style="margin-left: 10px;" />
+            </div>
 
             <div class="form-search">
-              <ul class="form-serach" v-if="filteredItems.length > 0">
-                <li
-                  @click="ItemClicked(item)"
-                  class="form-Searchfeild"
-                  v-for="item in this.filteredItems"
-                  :key="item"
-                >
+              <ul v-show="SearchPopUP" class="form-serach" v-if="filteredItems.length > 0">
+                <li @click="ItemClicked(item)" class="form-Searchfeild" v-for="item in this.filteredItems" :key="item">
                   {{ item }}
                 </li>
               </ul>
 
-              <label v-show="ItemNameClicked" v-if="filteredItems.length < 1"
-                >No results Found</label
-              >
+              <label v-else v-show="ItemNameClicked">No results Found</label>
             </div>
           </li>
           <li class="form-feild">
@@ -49,34 +38,33 @@
               <p class="field-label">Item SKU</p>
             </div>
 
-            <input
-              type="text"
-              :readonly="this.ItemSKUDisabled"
-              :style="{
+            <br />
+
+            <div class="form-input">
+              <input type="text" :readonly="this.ItemSKUDisabled" :style="{
                 backgroundColor: itemIsClicked,
                 color: itemIsClickedtext,
-              }"
-              class="text-input"
-              v-model="ItemSKUText"
-              v-on:input="FindSKU()"
-              placeholder="Please start typing item SKU."
-            />
+              }" class="text-input" v-model="ItemSKUText" v-on:input="FindSKU()"
+                placeholder="Please start typing item SKU." />
+
+              <input type='button' value="❌" @click="ClearFeilds()" style="margin-left: 10px;" />
+            </div>
 
             <div class="form-search">
-              <ul class="form-serach" v-if="filteredSKUs.length > 0">
-                <li
-                  @click="SKUClicked(sku)"
-                  class="form-Searchfeild"
-                  v-for="sku in this.filteredSKUs"
-                  :key="sku"
-                >
+              <ul v-show="SearchPopUP" class="form-serach" v-if="filteredSKUs.length > 0">
+                <li @click="SKUClicked(sku)" class="form-Searchfeild" v-for="sku in this.filteredSKUs" :key="sku">
                   {{ sku }}
                 </li>
               </ul>
 
-              <label v-show="ItemSKUClicked" v-else>No results Found</label>
+              <label v-else v-show="this.ItemSKUClicked">No results Found</label>
             </div>
           </li>
+          <li class="form-submit">
+            <input type="button" class="submit-button" @click="SubmitDelete(this.ItemNameText, this.ItemSKUText)"
+              value="Submit" />
+          </li>
+
         </ul>
       </form>
     </div>
@@ -86,6 +74,22 @@
 <style>
 .form-search {
   padding-top: 10px;
+}
+
+.form-submit {
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.form-input {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.input {
+  width: 100%
 }
 </style>
 
@@ -100,6 +104,8 @@ export default {
     );
     var DatabaseData = DatabaseRequest.data;
     this.ItemList.push(DatabaseData);
+    this.ItemNameClicked = true;
+    this.ItemSKUClicked = true;
   },
   methods: {
     FindItem: function () {
@@ -148,9 +154,15 @@ export default {
       });
     },
     ItemClicked: function (item) {
-      this.ItemNameClicked = false;
-      this.ItemNameDisabled = true;
       this.ItemNameText = item;
+
+      this.ItemNameClicked = false;
+      this.ItemSKUClicked = false;
+
+      this.SearchPopUP = false;
+
+      this.ItemNameDisabled = true;
+      this.ItemSKUDisabled = true
 
       this.ItemList.filter((data) => {
         for (let i = 0; i in data; i++) {
@@ -166,20 +178,56 @@ export default {
       this.itemIsClickedtext = "white";
     },
     SKUClicked: function (part) {
+      this.ItemSKUClicked = false;
+      this.ItemNameClicked = false;
+      this.SearchPopUP = false;
       this.ItemNameDisabled = true;
       this.ItemSKUDisabled = true;
-      this.ItemSKUClicked = false;
+
       this.itemIsClicked = "grey";
       this.itemIsClickedtext = "white";
 
       part = part.split("Item");
 
-      var ItemName = part[1].split("Name: ").slice(1);
-      var ItemSku = part[2].split("SKU: ").slice(1);
+      var ItemName = part[1].split("Name: ")[1];
+      var ItemSku = part[2].split("SKU: ")[1];
+
+      var Dotindex = ItemName.split(". ")
+
+      if (Dotindex.length > 1) {
+        ItemName = Dotindex[0]
+      }
+      else {
+        console.log('could not find the .')
+      }
 
       this.ItemNameText = ItemName;
       this.ItemSKUText = ItemSku;
     },
+    ClearFeilds: function () {
+      this.ItemNameText = ""
+      this.ItemSKUText = ""
+      this.ItemSKUClicked = true;
+      this.ItemNameClicked = true;
+      this.SearchPopUP = true;
+      this.ItemNameDisabled = false;
+      this.ItemSKUDisabled = false;
+
+      this.itemIsClicked = "";
+      this.itemIsClickedText = "";
+      this.filteredItems = []
+      this.filteredSKUs = []
+    },
+    SubmitDelete: function (NameText, SKUText) {
+      axios.post(
+        'http://localhost:3030/api/deleteitem',
+        {
+          ItemName: NameText,
+          ItemSKU: SKUText
+        }
+      ).then(res => { console.log(res.data) })
+
+    }
   },
   data() {
     return {
@@ -192,6 +240,7 @@ export default {
       ItemNameDisabled: false,
       ItemSKUClicked: false,
       ItemSKUDisabled: false,
+      SearchPopUP: true,
       itemIsClicked: "",
       itemIsClickedtext: "",
     };
