@@ -148,17 +148,18 @@ export default {
       });
     },
     ItemClicked: function (item) {
-      console.log("item clicked:", item);
       this.ItemNameClicked = false;
       this.ItemNameDisabled = true;
       this.ItemNameText = item;
 
       this.ItemList.filter((data) => {
-        data.filter((itemData) => {
-          if ((itemData.ItemName = item)) {
-            console.log(itemData);
+        for (let i = 0; i in data; i++) {
+          const currentitem = data[i];
+
+          if (currentitem.ItemName === item) {
+            this.ItemSKUText = currentitem.ItemSKU;
           }
-        });
+        }
       });
 
       this.itemIsClicked = "grey";
