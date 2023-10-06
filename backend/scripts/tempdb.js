@@ -11,7 +11,7 @@ module.exports = {
         });
         const URI = mongod.getUri();
 
-        console.log(URI)
+        console.log('Temp database running on http://localhost:3031')
         mongo.connect(URI, { dbName: "dev", useNewUrlParser: true, useUnifiedTopology: true }).then(() => { console.log("Connected to DB") }).catch((err) => { console.log("there was an error: ", err) })
     }
 }

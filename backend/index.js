@@ -2,7 +2,7 @@ const express = require('express');
 const { ConnectDB, DBStatus } = require('./scripts/db');
 const { TempDBConnect } = require('./scripts/tempdb');
 
-const { Additem, DeleteItem } = require('./scripts/additem.js')
+const { Additem, DeleteItem } = require('./scripts/item.js')
 const { SearchItem, SearchAllitems } = require('./scripts/serachitem.js')
 
 const app = express()
@@ -11,8 +11,6 @@ const bodyparser = require("body-parser");
 var port = process.env.PORT
 
 require('dotenv').config();
-
-console.log(process.env.DEP)
 
 if (process.env.DEP === "laptop") {
     TempDBConnect();
@@ -44,9 +42,6 @@ app.post('/api/deleteitem', (req, res) => {
     const ItemSKU = data.ItemSKU
 
     DeleteItem(ItemName, ItemSKU)
-
-    console.log(ItemName, ItemSKU)
-
     res.sendStatus(200)
 })
 
@@ -63,4 +58,4 @@ app.get('/', (req, res) => {
 })
 
 
-app.listen(port, () => { console.log(`listening on http://localhost:${port}`) })
+app.listen(port, () => { console.log(`website listening on http://localhost:${port}`) })

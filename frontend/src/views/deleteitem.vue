@@ -219,6 +219,11 @@ export default {
       this.filteredSKUs = []
     },
     SubmitDelete: function (NameText, SKUText) {
+      if (this.ItemNameText == '' || this.ItemSKUText == '') return alert("Please fill in the required feilds");
+
+      var Check = confirm("Are you sure you want to do this it cant be undone")
+      if (!Check) return console.log("user hit no");
+
       axios.post(
         'http://localhost:3030/api/deleteitem',
         {

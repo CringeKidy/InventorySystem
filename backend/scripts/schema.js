@@ -12,15 +12,7 @@ ItemTable = mongo.model('items', ItemSchema);
 
 module.exports = {
     ItemTable,
-    DeleteItem: async function(ItemName, ItemSku){
-        try{
-            const result = await ItemTable.deleteOne({ItemName, ItemSku})
-            console.log(result)
-
-
-        }catch(err){
-            console.log(err)
-        }
-        
+    DeleteItem: async function(ItemName, ItemSKU){
+        await ItemTable.deleteOne({ItemName, ItemSKU})
     }
 }
